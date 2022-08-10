@@ -1,0 +1,29 @@
+---
+# tasks file for role/maas
+
+- name: "pre_task | install packages"
+  apt: name={{item}} state=present
+  with_items:
+    - wget
+    - nano
+    - snap
+    - postgresql
+
+- name: "pre_task | install snap juju"
+  community.general.snap:
+    name:
+      - juju
+      - charm
+    classic: yes
+
+- name: "pre_task | install snap jq"
+  community.general.snap:
+    name:
+      - jq
+    classic: yes
+
+- name: "pre_task | install snap maas"
+  community.general.snap:
+    name:
+      - maas
+    channel: 3.2/stable

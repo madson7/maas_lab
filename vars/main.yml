@@ -1,0 +1,67 @@
+---
+# # vars file for vars
+
+# # Configuration section --------------------------------------------------------
+
+# # Adjust it if you want to use different user, e.g. "ubuntu"
+# # HOST_USERNAME: ENV["USER"]
+# HOST_USERNAME: "vagrant"
+
+# # Get the primary host IP. You can adjust it with a static value, 
+# # e.g. "192.168.1.10"
+# HOST_IP: "`ip route get 8.8.8.8 | head -1 | cut -z -d' ' -f7`"
+# # HOST_IP: "192.168.1.10"
+
+# OAM_NETWORK_PREFIX: "192.168.10."  # Operation and Maintenance (OAM) network
+# FIP_NETWORK_PREFIX: "192.168.11."  # FloatingIP network
+
+# MAAS_IP: "{{OAM_NETWORK_PREFIX}}2"
+
+# # Operations and Management (OAM) network MAAS DHCP range
+# OAM_DYNAMIC_RANGE_START: "{{OAM_NETWORK_PREFIX}}200"
+# OAM_DYNAMIC_RANGE_END  : "{{OAM_NETWORK_PREFIX}}254"
+
+# # OAM network reserved range (for gateway and MAAS)
+# OAM_RESERVED_RANGE_START: "{{OAM_NETWORK_PREFIX}}1"
+# OAM_RESERVED_RANGE_END  : "{{OAM_NETWORK_PREFIX}}9"
+
+# # Total number of Cloud Nodes
+# CLOUD_NODES_COUNT: "1"
+
+# # Local image mirror (See https://maas.io/docs/local-image-mirror)
+# LOCAL_IMAGE_MIRROR_URL: ""
+# # LOCAL_IMAGE_MIRROR_URL: "http://192.168.1.100/maas/images/ephemeral-v3/daily/"
+
+# # End of Configuration section -------------------------------------------------
+
+MAAS_IP: "192.168.10.2"
+OAM_DYNAMIC_RANGE_START: "192.168.10.200"
+OAM_DYNAMIC_RANGE_END: "192.168.10.254"
+OAM_RESERVED_RANGE_START: "192.168.10.1"
+OAM_RESERVED_RANGE_END: "192.168.10.9"
+HOST_USERNAME: "vagrant"
+HOST_IP: "192.168.121.131"
+OAM_NETWORK_PREFIX: "192.168.10."
+CLOUD_NODES_COUNT: "1"
+LOCAL_IMAGE_MIRROR_URL: ""
+
+node_ssh_user: vagrant
+node_source_ssh_keyfile: ./roles/maas_juju/files/id_rsa
+node_source_ssh_keyfile_pub: ./roles/maas_juju/files/id_rsa.pub
+
+# juju_client_template_configuration: ./roles/maas_juju/templates/clouds.yaml.j2
+juju_client_template_configuration_name: clouds.yaml
+# juju_client_template_credentials: ./roles/maas_juju/templates/credentials.yaml.j2
+juju_client_template_credentials_name: credentials.yaml
+
+ceph_template_credentials: ./roles/maas_juju/files/ceph/bundle.yaml
+ceph_template_credentials_name: bundle.yaml
+
+configure_postrgesql: ./roles/maas_juju/scripts/019-configure-postrgesql.sh
+configure_maas: ./roles/maas_juju/scripts/020-configure-maas.sh
+
+
+
+
+ 
+

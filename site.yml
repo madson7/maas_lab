@@ -1,0 +1,6 @@
+- hosts: maas_juju
+  become: True
+  roles:
+    - maas_juju
+  vars_files:
+    - "vars/main.yml"
