@@ -1,102 +1,102 @@
 ---
-# # tasks file for role/maas
+# tasks file for role/maas
 
-# - name: "pre_task | Add IP address of all hosts to all hosts"
-#   lineinfile:
-#     dest: /etc/hosts
-#     regexp: '.*{{item}}$'
-#     line: "{{hostvars[item].ansible_host}} {{item}}"
-#     state: present
-#   when: hostvars[item].ansible_host is defined
-#   with_items: "{{groups.all}}"
+- name: "pre_task | Add IP address of all hosts to all hosts"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{item}}$'
+    line: "{{hostvars[item].ansible_host}} {{item}}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{groups.all}}"
 
-# - name: "pre_task | Ensure that ssh directory for worker user exist"
-#   file:
-#     path: "/home/{{node_ssh_user}}/job"
-#     state: directory
-#     owner: "{{node_ssh_user}}"
-#     group: "{{node_ssh_user}}"
-#     mode: '0755'
-#   when: node_ssh_user != 'root'
-#   tags:
-#     - pre_task
+- name: "pre_task | Ensure that ssh directory for worker user exist"
+  file:
+    path: "/home/{{node_ssh_user}}/job"
+    state: directory
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0755'
+  when: node_ssh_user != 'root'
+  tags:
+    - pre_task
 
-# - name: "pre_task | Upload private ssh key id_rsa"
-#   copy:
-#     src: "{{node_source_ssh_keyfile}}"
-#     dest: "/home/{{node_ssh_user}}/.ssh/id_rsa"
-#     owner: "{{node_ssh_user}}"
-#     group: "{{node_ssh_user}}"
-#     mode: '0600'
-#   when: node_ssh_user != 'root'
-#   tags:
-#     - pre_task
+- name: "pre_task | Upload private ssh key id_rsa"
+  copy:
+    src: "{{node_source_ssh_keyfile}}"
+    dest: "/home/{{node_ssh_user}}/.ssh/id_rsa"
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0600'
+  when: node_ssh_user != 'root'
+  tags:
+    - pre_task
 
-# - name: "pre_task | Upload public ssh key id_rsa pub"
-#   copy:
-#     src: "{{node_source_ssh_keyfile_pub}}"
-#     dest: "/home/{{node_ssh_user}}/.ssh/id_rsa.pub"
-#     owner: "{{node_ssh_user}}"
-#     group: "{{node_ssh_user}}"
-#     mode: '0600'
-#   when: node_ssh_user != 'root'
-#   tags:
-#     - pre_task
+- name: "pre_task | Upload public ssh key id_rsa pub"
+  copy:
+    src: "{{node_source_ssh_keyfile_pub}}"
+    dest: "/home/{{node_ssh_user}}/.ssh/id_rsa.pub"
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0600'
+  when: node_ssh_user != 'root'
+  tags:
+    - pre_task
 
-# # The key must be injected into maas.supervisor namespace, instead on regular
-# # root user's home directory. This must be run after installing MAAS
-# # snap because the key will be injected into snap-created directory. If we
-# # had created this directory earlier, the snap would fail to install.
+# The key must be injected into maas.supervisor namespace, instead on regular
+# root user's home directory. This must be run after installing MAAS
+# snap because the key will be injected into snap-created directory. If we
+# had created this directory earlier, the snap would fail to install.
 
-# - name: "pre_task | Ensure that ssh directory for host's private SSH key"
-#   file:
-#     path: "/var/snap/maas/current/root/.ssh"
-#     state: directory
-#   tags:
-#     - pre_task
+- name: "pre_task | Ensure that ssh directory for host's private SSH key"
+  file:
+    path: "/var/snap/maas/current/root/.ssh"
+    state: directory
+  tags:
+    - pre_task
 
-# - name: "pre_task | Upload private ssh key id_rsa"
-#   copy:
-#     src: "{{node_source_ssh_keyfile}}"
-#     dest: "/var/snap/maas/current/root/.ssh/"
-#     owner: root
-#     group: root
-#     mode: '0400'
-#   tags:
-#     - pre_task
+- name: "pre_task | Upload private ssh key id_rsa"
+  copy:
+    src: "{{node_source_ssh_keyfile}}"
+    dest: "/var/snap/maas/current/root/.ssh/"
+    owner: root
+    group: root
+    mode: '0400'
+  tags:
+    - pre_task
 
-# # This is based on https://maas.io/docs/snap/3.0/ui/maas-installation
+# This is based on https://maas.io/docs/snap/3.0/ui/maas-installation
 
-# - name: "pre_task | Maas installation for database"
-#   ansible.builtin.script: "{{configure_postrgesql}}"
-#   args:
-#     executable: bash
+- name: "pre_task | Maas installation for database"
+  ansible.builtin.script: "{{configure_postrgesql}}"
+  args:
+    executable: bash
 
-# - name: "pre_task | Provision juju client templates configuration"
-#   template:
-#     src: "./roles/maas_juju/templates/clouds.yaml.j2"
-#     dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_configuration_name}}"
-#     owner: "{{node_ssh_user}}"
-#     group: "{{node_ssh_user}}"
-#     mode: "0644"
-#   when: node_ssh_user != 'root'
-#   tags:
-#     - pre_task
+- name: "pre_task | Provision juju client templates configuration"
+  template:
+    src: "./roles/maas_juju/templates/clouds.yaml.j2"
+    dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_configuration_name}}"
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: "0644"
+  when: node_ssh_user != 'root'
+  tags:
+    - pre_task
 
-# - name: "pre_task | Upload provision juju client templates credentials"
-#   copy:
-#     src: "./roles/maas_juju/files/juju/credentials.yaml"
-#     dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_credentials_name}}"
-#     owner: "{{node_ssh_user}}"
-#     group: "{{node_ssh_user}}"
-#     mode: '0600'
-#   when: node_ssh_user != 'root'
-#   tags:
-#     - pre_task
+- name: "pre_task | Upload provision juju client templates credentials"
+  copy:
+    src: "./roles/maas_juju/files/juju/credentials.yaml"
+    dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_credentials_name}}"
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0600'
+  when: node_ssh_user != 'root'
+  tags:
+    - pre_task
 
-- name: "pre_task | Set up Juju"
-  ansible.builtin.script:
-    cmd: "./roles/maas_juju/scripts/030-setup-juju.sh {{MAAS_IP}}"
+# - name: "pre_task | Set up Juju"
+#   ansible.builtin.script:
+#     cmd: "./roles/maas_juju/scripts/030-setup-juju.sh {{MAAS_IP}}"
 
 # - name: "pre_task | Upload Provision example Ceph juju bundle"
 #   copy:

@@ -3,15 +3,6 @@
 
 # Configuration section --------------------------------------------------------
 
-# Adjust it if you want to use different user, e.g. "ubuntu"
-HOST_USERNAME = ENV["USER"]
-# HOST_USERNAME = "ubuntu"
-
-# Get the primary host IP. You can adjust it with a static value, 
-# e.g. "192.168.1.10"
-HOST_IP = `ip route get 8.8.8.8 | head -1 | cut -z -d' ' -f7`
-# HOST_IP = "192.168.1.10"
-
 OAM_NETWORK_PREFIX = "192.168.10."  # Operation and Maintenance (OAM) network
 FIP_NETWORK_PREFIX = "192.168.11."  # FloatingIP network
 
