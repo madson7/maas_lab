@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
 
   # PXE nodes
   (1..CLOUD_NODES_COUNT).each do |i|
-    config.vm.define "node#{"%02d" % i}" do |node|
+    config.vm.define "node-#{"%02d" % i}" do |node|
       node.vm.network :private_network, ip: OAM_NETWORK_PREFIX + "#{i+10}",
         :libvirt__forward_mode => 'nat',
         :libvirt__network_name => 'OAM',
