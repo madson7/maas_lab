@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Configuration section --------------------------------------------------------
+# Env section --------------------------------------------------------
 
 OAM_NETWORK_PREFIX = "192.168.10."  # Operation and Maintenance (OAM) network
 FIP_NETWORK_PREFIX = "192.168.11."  # FloatingIP network
@@ -16,32 +16,23 @@ OAM_DYNAMIC_RANGE_END   = OAM_NETWORK_PREFIX + "254"
 OAM_RESERVED_RANGE_START = OAM_NETWORK_PREFIX + "1"
 OAM_RESERVED_RANGE_END   = OAM_NETWORK_PREFIX + "9"
 
-# Total number of Cloud Nodes
-CLOUD_NODES_COUNT = 1
+# Cloud Nodes
+CLOUD_NODES_COUNT = 0
+CLOUD_NODE_CPUS   = 4 
+CLOUD_NODE_MEMORY = 2048
 
-# CPU and RAM configuration for Cloud Nodes
-# Adjust the values that would fit into your host's capacity. Note that if you 
-# want to deploy e.g. OpenStack on MAAS, and then spin up VMs on OpenStack, you 
-# need to significantly bump up RAM and CPUs for Cloud Nodes.
-CLOUD_NODE_CPUS   = 4  # vCPUs per Cloud Node
-CLOUD_NODE_MEMORY = 2048  # 4GB plus ~200MB headroom 
-
-# End of Configuration section -------------------------------------------------
+# Env section -------------------------------------------------
 
 Vagrant.configure("2") do |config|
 
   config.ssh.insert_key = false
-  config.ssh.private_key_path = ["./roles/maas_juju/files/id_rsa", "~/.vagrant.d/insecure_private_key"]
-  config.vm.provision "file", source: "./roles/maas_juju/files/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+  config.ssh.private_key_path = ["~/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
 
   # MAAS Server
   config.vm.define "maas", primary: true do |maas|
     maas.vm.box = "generic/ubuntu2004"
     maas.vm.hostname = "maas"
-
-    # Forward MAAS GUI port for easier access
-    # MAAS GUI is accessible at http://localhost:5240/MAAS/
-    maas.vm.network "forwarded_port", guest: 5240, host: 5240
 
     maas.vm.provider :libvirt do |domain|
       domain.default_prefix = ""
@@ -56,6 +47,13 @@ Vagrant.configure("2") do |config|
       :libvirt__dhcp_enabled => false,
       :dhcp_enabled => false,
       :autostart => true
+
+
+    maas.vm.provision "ansible" do |ansible|
+      ansible.playbook = "site.yml"
+      # ansible.verbose = "vvv"
+    end
+
   end
 
   # PXE nodes

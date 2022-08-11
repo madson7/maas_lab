@@ -1,4 +1,4 @@
-- hosts: maas_juju
+- hosts: all
   become: True
   roles:
     - maas_juju
