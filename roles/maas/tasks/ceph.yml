@@ -1,0 +1,13 @@
+---
+# tasks file for role/maas
+
+- name: "storage_task | Upload Provision example Ceph juju bundle"
+  copy:
+    src: "./roles/maas/files/ceph/bundle.yaml"
+    dest: "/home/{{node_ssh_user}}/job/{{ceph_template_credentials_name}}"
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0600'
+  when: node_ssh_user != 'root'
+  tags:
+    - storage_task

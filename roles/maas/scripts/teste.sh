@@ -4,5 +4,5 @@ set -e
 
 # $1: -lh
 
-ls / $1
+ls $1
 #/ $1 >> /home/vagrant/job/teste

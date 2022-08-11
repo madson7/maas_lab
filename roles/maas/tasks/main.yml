@@ -1,0 +1,22 @@
+---
+# tasks file for role/maas
+- name: "main | Install and configuration maas e juju main tasks on Supported system"
+  block:
+
+    - name: "main | Include install"
+      include_tasks: "install.yml"
+
+    - name: "main | Include configs"
+      include_tasks: "configs.yml"
+
+    - name: "main | Include maas"
+      include_tasks: "maas.yml"
+
+    # - name: "main | Include juju"
+    #   include_tasks: "juju.yml"
+
+    # - name: "main | Include ceph bundle of juju"
+    #   include_tasks: "ceph.yml"
+
+    # - name: "main | Include openstack bundle of juju"
+    #   include_tasks: "openstack.yml"

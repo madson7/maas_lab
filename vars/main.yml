@@ -9,25 +9,25 @@ OAM_RESERVED_RANGE_END: "192.168.10.9"
 HOST_USERNAME: "vagrant"
 HOST_IP: "192.168.121.131"
 OAM_NETWORK_PREFIX: "192.168.10."
-CLOUD_NODES_COUNT: "1"
-LOCAL_IMAGE_MIRROR_URL: ""
+CLOUD_NODES_COUNT: "3"
+LOCAL_IMAGE_MIRROR_URL: "http://images.maas.io/ephemeral-v3/candidate"
+
+MAAS_DBUSER: "maas"
+MAAS_DBPASS: "maas"
+MAAS_DBNAME: "maas"
 
 node_ssh_user: vagrant
-node_source_ssh_keyfile: ./roles/maas_juju/files/id_rsa
-node_source_ssh_keyfile_pub: ./roles/maas_juju/files/id_rsa.pub
+node_source_ssh_keyfile: "~/.ssh/id_rsa"
+node_source_ssh_keyfile_pub: ./roles/maas/files/id_rsa.pub
 
-# juju_client_template_configuration: ./roles/maas_juju/templates/clouds.yaml.j2
+# juju_client_template_configuration: ./roles/maas/templates/clouds.yaml.j2
 juju_client_template_configuration_name: clouds.yaml
-# juju_client_template_credentials: ./roles/maas_juju/templates/credentials.yaml.j2
+# juju_client_template_credentials: ./roles/maas/templates/credentials.yaml.j2
 juju_client_template_credentials_name: credentials.yaml
 
-ceph_template_credentials: ./roles/maas_juju/files/ceph/bundle.yaml
+ceph_template_credentials: ./roles/maas/files/ceph/bundle.yaml
 ceph_template_credentials_name: bundle.yaml
 
-configure_postrgesql: ./roles/maas_juju/scripts/019-configure-postrgesql.sh
-configure_maas: ./roles/maas_juju/scripts/020-configure-maas.sh
+configure_postrgesql: ./roles/maas/scripts/019-configure-postrgesql.sh
+configure_maas: ./roles/maas/scripts/020-configure-maas.sh
 
-
-
-
- 

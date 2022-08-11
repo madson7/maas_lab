@@ -1,6 +1,6 @@
 - hosts: all
   become: True
   roles:
-    - maas_juju
+    - maas
   vars_files:
     - "vars/main.yml"
