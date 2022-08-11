@@ -1,0 +1,39 @@
+---
+# tasks file for role/maas
+
+- name: "pre_task | Add IP address of all hosts to all hosts"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{item}}$'
+    line: "{{hostvars[item].ansible_host}} {{item}}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{groups.all}}"
+
+- name: "pre_task | Ensure that ssh directory for worker user exist"
+  file:
+    path: "/home/{{node_ssh_user}}/job"
+    state: directory
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0755'
+  when: node_ssh_user != 'root'
+  tags:
+    - pre_task
+
+- name: "pre_task | Ensure that ssh directory for host's private SSH key"
+  file:
+    path: "/var/snap/maas/current/root/.ssh"
+    state: directory
+  tags:
+    - pre_task
+
+- name: "pre_task | Upload private ssh key id_rsa"
+  copy:
+    src: "{{node_source_ssh_keyfile}}"
+    dest: "/var/snap/maas/current/root/.ssh/"
+    owner: root
+    group: root
+    mode: '0400'
+  tags:
+    - pre_task
