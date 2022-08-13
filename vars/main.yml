@@ -18,7 +18,7 @@ MAAS_DBNAME: "maas"
 
 node_ssh_user: vagrant
 node_source_ssh_keyfile: "~/.ssh/id_rsa"
-node_source_ssh_keyfile_pub: ./roles/maas/files/id_rsa.pub
+node_source_ssh_keyfile_pub: "~/.ssh/id_rsa.pub"
 
 # juju_client_template_configuration: ./roles/maas/templates/clouds.yaml.j2
 juju_client_template_configuration_name: clouds.yaml
