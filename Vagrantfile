@@ -17,7 +17,7 @@ OAM_RESERVED_RANGE_START = OAM_NETWORK_PREFIX + "1"
 OAM_RESERVED_RANGE_END   = OAM_NETWORK_PREFIX + "9"
 
 # Cloud Nodes
-CLOUD_NODES_COUNT = 3
+CLOUD_NODES_COUNT = 1
 CLOUD_NODE_CPUS   = 4 
 CLOUD_NODE_MEMORY = 2048
 
@@ -55,7 +55,6 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "site.yml"
       ansible.verbose = "vvv"
     end
-
   end
 
   # PXE nodes
