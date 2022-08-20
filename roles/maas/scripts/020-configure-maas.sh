@@ -164,24 +164,24 @@ done
 
 
 # # Create nodeNN nodes
-# echo "Creating machines..."
-# for i in $(seq 1 ${9})
-# do
-#     # Check if the machine exists
-#     NODE_NUM=$(printf %02d ${i})
-#     MACHINE=$(maas root machines read hostname=node-${NODE_NUM} | jq '.[] | .system_id')
+echo "Creating machines..."
+for i in $(seq 1 ${9})
+do
+    # Check if the machine exists
+    NODE_NUM=$(printf %02d ${i})
+    MACHINE=$(maas root machines read hostname=node-${NODE_NUM} | jq '.[] | .system_id')
 
-#     if [ -z ${MACHINE} ]
-#     then
-#         maas root machines create \
-#             architecture="amd64/generic" \
-#             mac_addresses="0e:00:00:00:00:${NODE_NUM}" \
-#             hostname=node-${NODE_NUM} \
-#             power_type=virsh power_parameters='{"power_address": "qemu+ssh://'${6}'@'${7}'/system", "power_pass": "'${14}'" , "power_id": "node-'${NODE_NUM}'"}'
-#     else
-#         echo "Machine node-${NODE_NUM} already exists, skipping"
-#     fi
-# done
+    if [ -z ${MACHINE} ]
+    then
+        maas root machines create \
+            architecture="amd64/generic" \
+            mac_addresses="0e:00:00:00:00:${NODE_NUM}" \
+            hostname=node-${NODE_NUM} \
+            power_type=virsh power_parameters='{"power_address": "qemu+ssh://'${6}'@'${7}'/system", "power_pass": "'${14}'" , "power_id": "node-'${NODE_NUM}'"}'
+    else
+        echo "Machine node-${NODE_NUM} already exists, skipping"
+    fi
+done
 
 # Reset power of the machines so that they can start commissioning
 echo "Power cycling machines..."

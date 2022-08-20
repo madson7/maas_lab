@@ -5,6 +5,7 @@
 - name: "maass_task | Maas installation for database"
   ansible.builtin.script:
     cmd: "./roles/maas/scripts/019-configure-postrgesql.sh {{MAAS_DBUSER}} {{MAAS_DBPASS}} {{MAAS_DBNAME}}"
+  become: yes
 
 - name: "maass_task | Maas configure the installation"
   ansible.builtin.script:
