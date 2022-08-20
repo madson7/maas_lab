@@ -15,6 +15,7 @@ set -e
 # $11: MAAS_DBUSER
 # $12: MAAS_DBPASS
 # $13: MAAS_DBNAME
+# $14: HOST_PASS
 
 # Initialize MAAS
 echo "Initializing MAAS..."
@@ -143,23 +144,44 @@ for i in $(seq 1 ${9})
 do
     # Check if the machine exists
     NODE_NUM=$(printf %02d ${i})
-    MACHINE=$(maas root machines read hostname=node${NODE_NUM} | jq '.[] | .system_id')
+    MACHINE=$(maas root machines read hostname=node-${NODE_NUM} | jq '.[] | .system_id')
 
     if [ -z ${MACHINE} ]
     then
         maas root machines create \
             architecture="amd64/generic" \
             mac_addresses="AC:1F:6B:6A:7D:0D" \
-            hostname=node${NODE_NUM} \
+            hostname=node-${NODE_NUM} \
             power_type=ipmi \
             power_parameters_power_driver=LAN_2_0 \
             power_parameters_power_user=ADMIN \
             power_parameters_power_pass=ADMIN \
             power_parameters_power_address="192.168.88.253"
     else
-        echo "Machine node${NODE_NUM} already exists, skipping"
+        echo "Machine node-${NODE_NUM} already exists, skipping"
     fi
 done
+
+
+# # Create nodeNN nodes
+# echo "Creating machines..."
+# for i in $(seq 1 ${9})
+# do
+#     # Check if the machine exists
+#     NODE_NUM=$(printf %02d ${i})
+#     MACHINE=$(maas root machines read hostname=node-${NODE_NUM} | jq '.[] | .system_id')
+
+#     if [ -z ${MACHINE} ]
+#     then
+#         maas root machines create \
+#             architecture="amd64/generic" \
+#             mac_addresses="0e:00:00:00:00:${NODE_NUM}" \
+#             hostname=node-${NODE_NUM} \
+#             power_type=virsh power_parameters='{"power_address": "qemu+ssh://'${6}'@'${7}'/system", "power_pass": "'${14}'" , "power_id": "node-'${NODE_NUM}'"}'
+#     else
+#         echo "Machine node-${NODE_NUM} already exists, skipping"
+#     fi
+# done
 
 # Reset power of the machines so that they can start commissioning
 echo "Power cycling machines..."
@@ -167,7 +189,7 @@ for i in $(seq 1 ${9})
 do
     # Check if the machine exists
     NODE_NUM=$(printf %02d ${i})
-    MACHINE=$(maas root machines read hostname=node${NODE_NUM} | \
+    MACHINE=$(maas root machines read hostname=node-${NODE_NUM} | \
         jq --raw-output '.[] | .system_id')
 
     if [ ! -z ${MACHINE} ]
@@ -180,7 +202,7 @@ do
         # in 'Ready' state
         if [ ${MACHINE_STATUS} == "Ready" ]
         then
-            echo "Machine \'node${NODE_NUM}\' (${MACHINE}) is already" \
+            echo "Machine \'node-${NODE_NUM}\' (${MACHINE}) is already" \
                  "commissioned, skipping..."
             continue
         fi
@@ -198,16 +220,16 @@ do
         # Power off the machine if it is on
         while [ ${POWER_STATE} != "off" ]
         do
-            echo "Powering off machine \'node${NODE_NUM}\' (${MACHINE})"
+            echo "Powering off machine \'node-${NODE_NUM}\' (${MACHINE})"
             maas root machine power-off ${MACHINE}
 
             POWER_STATE=$(maas root machine query-power-state ${MACHINE} | \
                 jq --raw-output '.state')
         done
 
-        echo "Requesting commissioning of the machine \'node${NODE_NUM}\' (${MACHINE})"
+        echo "Requesting commissioning of the machine \'node-${NODE_NUM}\' (${MACHINE})"
         maas root machine commission ${MACHINE}
     else
-        echo "WARNING: Machine node${NODE_NUM} does not exist, skipping"
+        echo "WARNING: Machine node-${NODE_NUM} does not exist, skipping"
     fi
 done
