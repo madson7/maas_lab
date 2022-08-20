@@ -3,11 +3,11 @@
 - name: "main | Install and configuration maas e juju main tasks on Supported system"
   block:
 
-    # - name: "main | Include install"
-    #   include_tasks: "install.yml"
+    - name: "main | Include install"
+      include_tasks: "install.yml"
 
-    # - name: "main | Include configs"
-    #   include_tasks: "configs.yml"
+    - name: "main | Include configs"
+      include_tasks: "configs.yml"
 
     - name: "main | Include maas"
       include_tasks: "maas.yml"
