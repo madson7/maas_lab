@@ -6,17 +6,22 @@ OAM_DYNAMIC_RANGE_START: "192.168.10.200"
 OAM_DYNAMIC_RANGE_END: "192.168.10.254"
 OAM_RESERVED_RANGE_START: "192.168.10.1"
 OAM_RESERVED_RANGE_END: "192.168.10.9"
-HOST_USERNAME: "madson"
+
+# Variaveis referentes a conexão do libvirt sentido maas > hospedeiro
+# onde o sshd no host precisa estar habilitado
+HOST_USERNAME: "juamsv"
 HOST_IP: "192.168.0.10"
+
 OAM_NETWORK_PREFIX: "192.168.10."
 CLOUD_NODES_COUNT: "1"
 LOCAL_IMAGE_MIRROR_URL: "http://images.maas.io/ephemeral-v3/candidate"
 
+# Variaveis do Banco de Dados
 MAAS_DBUSER: "maas"
 MAAS_DBPASS: "maas"
 MAAS_DBNAME: "maas"
 
-HOST_PASS: "teste"
+#HOST_PASS: "teste"
 
 node_ssh_user: vagrant
 node_source_ssh_keyfile: "~/.ssh/id_rsa"
@@ -30,6 +35,7 @@ juju_client_template_credentials_name: credentials.yaml
 ceph_template_credentials: ./roles/maas/files/ceph/bundle.yaml
 ceph_template_credentials_name: bundle.yaml
 
+# Shell scrips para execução via playbook
 configure_postrgesql: ./roles/maas/scripts/019-configure-postrgesql.sh
 configure_maas: ./roles/maas/scripts/020-configure-maas.sh
 
