@@ -1,6 +1,12 @@
 ---
 # tasks file for role/maas
 
+- name: "Atualização do Sistema"
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+
 - name: "install_task | packages"
   apt: name={{item}} state=present
   with_items:
