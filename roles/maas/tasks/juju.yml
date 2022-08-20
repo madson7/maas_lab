@@ -2,7 +2,7 @@
 # tasks file for role/maas
 # This is based on https://maas.io/docs/snap/3.2/ui/maas-installation
 
-- name: "maass_task | Provision juju client templates configuration"
+- name: "maass_task | Provisiona o arquivo de endpoint do maasw "
   template:
     src: "./roles/maas/templates/clouds.yaml.j2"
     dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_configuration_name}}"
