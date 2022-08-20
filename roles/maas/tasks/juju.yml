@@ -24,22 +24,17 @@
   tags:
     - maass_task
 
-# - name: "maass_task | Set up Juju"
-#   ansible.builtin.script:
-#     cmd: "./roles/maas/scripts/030-setup-juju.sh {{MAAS_IP}}"
+- name: "maass_task | Upload Provision example Ceph juju bundle"
+  copy:
+    src: "./roles/maas/files/ceph/bundle.yaml"
+    dest: "/home/{{node_ssh_user}}/job/{{ceph_template_credentials_name}}"
+    owner: "{{node_ssh_user}}"
+    group: "{{node_ssh_user}}"
+    mode: '0600'
+  when: node_ssh_user != 'root'
+  tags:
+    - maass_task
 
-# - name: "maass_task | Upload Provision example Ceph juju bundle"
-#   copy:
-#     src: "./roles/maas/files/ceph/bundle.yaml"
-#     dest: "/home/{{node_ssh_user}}/job/{{ceph_template_credentials_name}}"
-#     owner: "{{node_ssh_user}}"
-#     group: "{{node_ssh_user}}"
-#     mode: '0600'
-#   when: node_ssh_user != 'root'
-#   tags:
-#     - maass_task
-
-# - name: "maass_task | Maas configure the installation"
-#   ansible.builtin.script:
-#     cmd: "./roles/maas/scripts/020-configure-maas.sh {{MAAS_IP}} {{OAM_DYNAMIC_RANGE_START}} {{OAM_DYNAMIC_RANGE_END}} {{OAM_RESERVED_RANGE_START}} {{OAM_RESERVED_RANGE_END}} {{HOST_USERNAME}} {{HOST_IP}} {{OAM_NETWORK_PREFIX}} {{CLOUD_NODES_COUNT}} {{LOCAL_IMAGE_MIRROR_URL}}"
-
+- name: "maass_task | Set up Juju"
+  ansible.builtin.script:
+    cmd: "./roles/maas/scripts/030-setup-juju.sh {{MAAS_IP}}"
