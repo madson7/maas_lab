@@ -17,7 +17,7 @@ OAM_RESERVED_RANGE_START = OAM_NETWORK_PREFIX + "1"
 OAM_RESERVED_RANGE_END   = OAM_NETWORK_PREFIX + "9"
 
 # Cloud Nodes
-CLOUD_NODES_COUNT = 1
+CLOUD_NODES_COUNT = 3
 CLOUD_NODE_CPUS   = 4 
 CLOUD_NODE_MEMORY = 2048
 
@@ -88,8 +88,8 @@ Vagrant.configure("2") do |config|
         domain.default_prefix = ""
         domain.cpus = CLOUD_NODE_CPUS
         domain.memory = CLOUD_NODE_MEMORY
-        domain.storage :file, :size => '16G', :bus => 'scsi'  # Operating System
-        domain.storage :file, :size => '18G', :bus => 'scsi'  # Data disk (e.g. for Ceph OSD)
+        # domain.storage :file, :size => '16G', :bus => 'scsi'  # Operating System
+        # domain.storage :file, :size => '18G', :bus => 'scsi'  # Data disk (e.g. for Ceph OSD)
         boot_network = {'network' => 'OAM'}
         domain.boot boot_network
         domain.autostart = false

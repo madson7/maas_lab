@@ -1,0 +1,10 @@
+
+maas root vm-hosts create type="virsh" power_address="qemu+ssh://juamsv@192.168.10.1/system" power_pass="super@senha" name="juamsv"
+
+virt-install --name node-1 \
+    --virt-type kvm --memory 2096 --vcpus 2 \
+    --disk size=15,device=disk \
+    --os-type linux --os-variant generic \
+    --network network=OAM\
+    --graphics none \
+    --import
