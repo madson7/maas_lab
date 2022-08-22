@@ -26,9 +26,9 @@ fi
 # Edit /etc/postgresql/10/main/pg_hba.conf and add a line for the newly
 # created database, replacing the variables with actual names
 if ! grep -qw "host    ${3}    ${1}    0/0     md5" \
-    /etc/postgresql/12/main/pg_hba.conf
+    /etc/postgresql/14/main/pg_hba.conf
 then
-    tee -a /etc/postgresql/12/main/pg_hba.conf << EOF
+    tee -a /etc/postgresql/14/main/pg_hba.conf << EOF
 host    ${3}    ${1}    0/0     md5
 EOF
 fi
