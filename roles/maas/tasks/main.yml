@@ -5,6 +5,9 @@
 
     - name: "main | Include install"
       include_tasks: "install.yml"
+    
+    - name: "main | Include postgres"
+      include_tasks: "psql.yml"
 
     - name: "main | Include configs"
       include_tasks: "configs.yml"
