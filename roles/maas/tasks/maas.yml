@@ -9,5 +9,5 @@
 
 - name: "maass_task | Maas configure the installation"
   ansible.builtin.script:
-    cmd: "./roles/maas/scripts/020-configure-maas.sh {{MAAS_IP}} {{OAM_DYNAMIC_RANGE_START}} {{OAM_DYNAMIC_RANGE_END}} {{OAM_RESERVED_RANGE_START}} {{OAM_RESERVED_RANGE_END}} {{HOST_USERNAME}} {{HOST_IP}} {{OAM_NETWORK_PREFIX}} {{CLOUD_NODES_COUNT}} {{LOCAL_IMAGE_MIRROR_URL}} {{MAAS_DBUSER}} {{MAAS_DBPASS}} {{MAAS_DBNAME}} {{HOST_PASS}}"
+    cmd: "./roles/maas/scripts/020-configure-maas.sh {{MAAS_IP}} {{OAM_DYNAMIC_RANGE_START}} {{OAM_DYNAMIC_RANGE_END}} {{OAM_RESERVED_RANGE_START}} {{OAM_RESERVED_RANGE_END}} {{HOST_USERNAME}} {{HOST_IP}} {{OAM_NETWORK_PREFIX}} {{CLOUD_NODES_COUNT}} {{LOCAL_IMAGE_MIRROR_URL}} {{MAAS_DBUSER}} {{MAAS_DBPASS}} {{MAAS_DBNAME}}"
 

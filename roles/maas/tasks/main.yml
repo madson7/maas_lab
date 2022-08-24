@@ -9,7 +9,7 @@
     - name: "main | Include configs"
       include_tasks: "configs.yml"
 
-    - name: "main | Include maas"
+    - name: "main | Include maas configs"
       include_tasks: "maas.yml"
 
     # - name: "main | Include juju"
