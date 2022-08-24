@@ -39,3 +39,5 @@ ceph_template_credentials_name: bundle.yaml
 configure_postrgesql: ./roles/maas/scripts/019-configure-postrgesql.sh
 configure_maas: ./roles/maas/scripts/020-configure-maas.sh
 
+# Nao sei exatamente o que faz
+allow_world_readable_tmpfiles: true
