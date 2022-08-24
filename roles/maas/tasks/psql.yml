@@ -1,0 +1,65 @@
+---
+
+- name: Install required packages
+  apt:
+    name:
+      - wget
+      - python3-psycopg2
+      - acl
+    state: latest
+
+- name: Set up Postgres 14 repo
+  shell: |
+    echo "deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  args:
+    warn: no
+
+- name: Install postgresql
+  apt:
+    name: postgresql-14
+    update_cache: yes
+  notify:
+    - Enable Postgresql
+
+- name: Ensure PostgreSQL is listening on *
+  lineinfile:
+    dest: /etc/postgresql/14/main/postgresql.conf
+    regexp: '^listen_addresses\s*='
+    line: "listen_addresses='*'"
+    state: present
+  notify:
+    - Restart Postgresql
+
+- name: Add new configuration to "pg_hba.conf"
+  blockinfile:
+    dest: /etc/postgresql/14/main/pg_hba.conf
+    block: |
+      host    all             all             0.0.0.0/0                md5
+      host    all             all             ::/0                     md5
+  notify:
+    - Restart Postgresql
+
+- name: Change peer identification to trust
+  shell: /bin/sed -i '/^local/s/peer/trust/' /etc/postgresql/14/main/pg_hba.conf
+  args:
+    warn: no
+  notify:
+    - Restart Postgresql
+
+- name: Create a Superuser PostgreSQL database user
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: '{{ MAAS_DBUSER }}'
+    password: '{{ MAAS_DBPASS }}'
+    role_attr_flags: CREATEDB,SUPERUSER,CREATEROLE,REPLICATION
+    encrypted: yes
+    state: present
+
+- name: Create app database
+  postgresql_db:
+    state: present
+    name: "{{ MAAS_DBNAME }}"
+  become: yes
+  become_user: postgres

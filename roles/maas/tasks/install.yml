@@ -18,7 +18,6 @@
     - wget
     - nano
     - snap
-    - postgresql
 
 - name: "install_task | snap juju"
   community.general.snap:
