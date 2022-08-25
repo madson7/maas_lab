@@ -3,7 +3,7 @@
 
 # Env section --------------------------------------------------------
 
-OAM_NETWORK_PREFIX = "192.168.10."  # Operation and Maintenance (OAM) network
+OAM_NETWORK_PREFIX = "192.168.88."  # Operation and Maintenance (OAM) network
 FIP_NETWORK_PREFIX = "192.168.11."  # FloatingIP network
 
 MAAS_IP = OAM_NETWORK_PREFIX + "2"
@@ -17,8 +17,8 @@ OAM_RESERVED_RANGE_START = OAM_NETWORK_PREFIX + "1"
 OAM_RESERVED_RANGE_END   = OAM_NETWORK_PREFIX + "9"
 
 # Cloud Nodes
-CLOUD_NODES_COUNT = 3
-CLOUD_NODE_CPUS   = 4 
+CLOUD_NODES_COUNT = 0
+CLOUD_NODE_CPUS   = 4
 CLOUD_NODE_MEMORY = 2048
 
 # Env section -------------------------------------------------
@@ -42,27 +42,23 @@ Vagrant.configure("2") do |config|
       domain.memory = "2048"
     end
 
-    maas.vm.network "private_network", ip: MAAS_IP,
-      :libvirt__netmask => "255.255.255.0",
-      :libvirt__forward_mode => 'nat',
-      :libvirt__network_name => 'OAM',
-      :libvirt__dhcp_enabled => false,
-      :dhcp_enabled => false,
-      :autostart => true
-
+    maas.vm.network "public_network", 
+      :dev => "enp3s0", 
+      :mode => 'bridge', 
+      :ip => MAAS_IP
 
     maas.vm.provision "ansible" do |ansible|
       ansible.playbook = "site.yml"
       ansible.verbose = "vvv"
     end
 
-    maas.vm.post_up_message = 
-      "Parabéns! O servidor MAAS foi instalado com sucesso e\n" \
-      "provisionado. O comissionamento dos Cloud Nodes provavelmente está em\n" \
-      "progredir agora.\n\n" \
-      "Acesse a GUI do MAAS visitando " \
-      "http://192.168.10.2:5240/MAAS\n" \
-      "Username: root\nPassword: root"
+    # maas.vm.post_up_message = 
+    #   "Parabéns! O servidor MAAS foi instalado com sucesso e\n" \
+    #   "provisionado. O comissionamento dos Cloud Nodes provavelmente está em\n" \
+    #   "progredir agora.\n\n" \
+    #   "Acesse a GUI do MAAS visitando " \
+    #   "http://192.168.10.2:5240/MAAS\n" \
+    #   "Username: root\nPassword: root"
 
   end
 
