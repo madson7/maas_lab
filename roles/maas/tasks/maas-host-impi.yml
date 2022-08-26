@@ -1,0 +1,13 @@
+---
+# tasks file for role/maas
+# This is based on https://maas.io/docs/how-to-install-maas
+
+# $1: HOST_IP
+# $2: HOST_MAC
+# $3: HOST_USER
+# $4: HOST_PASS
+
+- name: "maass_task | Maas configure the host IPMI"
+  ansible.builtin.script:
+    cmd: "./roles/maas/scripts/022-ipmi-host.sh"
+

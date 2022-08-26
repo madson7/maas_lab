@@ -1,18 +1,18 @@
 ---
 # vars file for vars
 
-MAAS_IP: "192.168.10.2"
-OAM_DYNAMIC_RANGE_START: "192.168.10.200"
-OAM_DYNAMIC_RANGE_END: "192.168.10.254"
-OAM_RESERVED_RANGE_START: "192.168.10.1"
-OAM_RESERVED_RANGE_END: "192.168.10.9"
+MAAS_IP: "192.168.88.2"
+OAM_DYNAMIC_RANGE_START: "192.168.88.200"
+OAM_DYNAMIC_RANGE_END: "192.168.88.254"
+OAM_RESERVED_RANGE_START: "192.168.88.1"
+OAM_RESERVED_RANGE_END: "192.168.88.9"
 
 # Variaveis referentes a conexão do libvirt sentido maas > hospedeiro
 # onde o sshd no host precisa estar habilitado
 HOST_USERNAME: "juamsv"
 HOST_IP: "192.168.0.10"
 
-OAM_NETWORK_PREFIX: "192.168.10."
+OAM_NETWORK_PREFIX: "192.168.88."
 CLOUD_NODES_COUNT: "1"
 LOCAL_IMAGE_MIRROR_URL: "http://images.maas.io/ephemeral-v3/candidate"
 

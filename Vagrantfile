@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
     end
 
     maas.vm.network "public_network", 
-      :dev => "enp3s0", 
+      :dev => "enx00e04c680001", 
       :mode => 'bridge', 
       :ip => MAAS_IP
 
@@ -52,45 +52,6 @@ Vagrant.configure("2") do |config|
       ansible.verbose = "vvv"
     end
 
-    # maas.vm.post_up_message = 
-    #   "Parabéns! O servidor MAAS foi instalado com sucesso e\n" \
-    #   "provisionado. O comissionamento dos Cloud Nodes provavelmente está em\n" \
-    #   "progredir agora.\n\n" \
-    #   "Acesse a GUI do MAAS visitando " \
-    #   "http://192.168.10.2:5240/MAAS\n" \
-    #   "Username: root\nPassword: root"
-
   end
 
-  # PXE nodes
-  (1..CLOUD_NODES_COUNT).each do |i|
-    config.vm.define "node-#{"%02d" % i}" do |node|
-      node.vm.network :private_network, ip: OAM_NETWORK_PREFIX + "#{i+10}",
-        :libvirt__forward_mode => 'nat',
-        :libvirt__network_name => 'OAM',
-        :libvirt__dhcp_enabled => false,
-        :dhcp_enabled => false,
-        :autostart => true,
-        :mac => "0e00000000#{"%02d" % i}"
-
-      node.vm.network :private_network, ip: FIP_NETWORK_PREFIX + "#{i+10}",
-        :libvirt__netmask => "255.255.255.0",
-        :libvirt__forward_mode => 'nat',
-        :libvirt__network_name => 'FloatingIP',
-        :libvirt__dhcp_enabled => false,
-        :autostart => true
-
-      node.vm.provider :libvirt do |domain|
-        domain.default_prefix = ""
-        domain.cpus = CLOUD_NODE_CPUS
-        domain.memory = CLOUD_NODE_MEMORY
-        # domain.storage :file, :size => '16G', :bus => 'scsi'  # Operating System
-        # domain.storage :file, :size => '18G', :bus => 'scsi'  # Data disk (e.g. for Ceph OSD)
-        boot_network = {'network' => 'OAM'}
-        domain.boot boot_network
-        domain.autostart = false
-        domain.mgmt_attach = false
-      end
-    end
-  end
 end

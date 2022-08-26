@@ -3,20 +3,23 @@
 - name: "main | Install and configuration maas e juju main tasks on Supported system"
   block:
 
-    - name: "main | Include install"
-      include_tasks: "install.yml"
+    # - name: "main | Include install"
+    #   include_tasks: "install.yml"
     
-    - name: "main | Include postgres"
-      include_tasks: "psql.yml"
+    # - name: "main | Include postgres"
+    #   include_tasks: "psql.yml"
 
-    - name: "main | Include configs"
-      include_tasks: "configs.yml"
+    # - name: "main | Include configs"
+    #   include_tasks: "configs.yml"
 
-    - name: "main | Include maas configs"
-      include_tasks: "maas.yml"
+    # - name: "main | Include maas configs"
+    #   include_tasks: "maas.yml"
 
-    # - name: "main | Include juju"
-    #   include_tasks: "juju.yml"
+    # - name: "main | Include maas configs host IPMI"
+    #   include_tasks: "maas-host-impi.yml"
+
+    - name: "main | Include juju"
+      include_tasks: "juju.yml"
 
     # - name: "main | Include ceph bundle of juju"
     #   include_tasks: "ceph.yml"
