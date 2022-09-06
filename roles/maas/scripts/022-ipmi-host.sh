@@ -25,7 +25,7 @@ then
         power_parameters_power_driver=LAN_2_0 \
         power_parameters_power_user=ADMIN \
         power_parameters_power_pass=ADMIN \
-        power_parameters_power_address="192.168.88.233"
+        power_parameters_power_address="192.168.10.20"
 else
     echo "Machine node-${NODE_NUM} already exists, skipping"
 fi

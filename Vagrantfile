@@ -22,6 +22,9 @@ CLOUD_NODE_CPUS   = 4
 CLOUD_NODE_MEMORY = 2048
 
 # Env section -------------------------------------------------
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
+
 
 Vagrant.configure("2") do |config|
 
@@ -43,7 +46,7 @@ Vagrant.configure("2") do |config|
     end
 
     maas.vm.network "public_network", 
-      :dev => "enx00e04c680001", 
+      :dev => "enp0s20f0u2u4", 
       :mode => 'bridge', 
       :ip => MAAS_IP
 
