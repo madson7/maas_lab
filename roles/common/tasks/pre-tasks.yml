@@ -1,0 +1,4 @@
+- name: 'Atualizando reposit.'
+  raw: apt-get update -y
+- name: 'Install python'
+  raw: 'apt-get install -y python3'

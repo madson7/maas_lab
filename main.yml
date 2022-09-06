@@ -1,0 +1,15 @@
+- hosts: all
+  become: yes
+  # gather_facts: no
+  pre_tasks:
+  roles:
+  - { role: common, tags: ["pre_tasks"]}
+
+- hosts: all
+  become: yes
+  roles:
+  - { role: postgres, tags: ["postgres"]}
+  - { role: maas, tags: ["maas_install"]}
+  - { role: juju, tags: ["juju_install"]}
+  vars_files:
+    - "vars/main.yml"
