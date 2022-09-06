@@ -45,10 +45,10 @@ Vagrant.configure("2") do |config|
       domain.memory = "2048"
     end
 
-    maas.vm.network "public_network", 
-      :dev => "enp0s20f0u2u4", 
-      :mode => 'bridge', 
-      :ip => MAAS_IP
+    # maas.vm.network "public_network", 
+    #   :dev => "enp0s20f0u2u4", 
+    #   :mode => 'bridge', 
+    #   :ip => MAAS_IP
 
     maas.vm.provision "ansible" do |ansible|
       ansible.playbook = "site.yml"
