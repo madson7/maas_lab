@@ -1,0 +1,23 @@
+---
+# file: roles/maas/handlers/main.yml
+
+- name: Restart Postgresql
+  systemd:
+    name: postgresql
+    state: restarted
+  listen: "Restart Postgresql"
+
+- name: Start Postgresql
+  systemd:
+    name: postgresql
+    state: started
+
+- name: Stop Postgresql
+  systemd:
+    name: postgresql
+    state: stopped
+
+- name: Enable Postgresql
+  systemd:
+    name: postgresql
+    enabled: yes
