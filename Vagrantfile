@@ -51,10 +51,9 @@ Vagrant.configure("2") do |config|
     #   :ip => MAAS_IP
 
     maas.vm.provision "ansible" do |ansible|
-      ansible.playbook = "site.yml"
+      ansible.playbook = "main.yml"
       ansible.verbose = "vvv"
     end
 
   end
-
 end
