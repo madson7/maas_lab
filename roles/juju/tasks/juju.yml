@@ -5,33 +5,33 @@
 - name: "maass_task | Provisiona o arquivo de endpoint do maasw "
   template:
     src: "./roles/maas/templates/clouds.yaml.j2"
-    dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_configuration_name}}"
-    owner: "{{node_ssh_user}}"
-    group: "{{node_ssh_user}}"
+    dest: "/home/{{NODE_SSH_USER}}/job/{{juju_client_template_configuration_name}}"
+    owner: "{{NODE_SSH_USER}}"
+    group: "{{NODE_SSH_USER}}"
     mode: "0644"
-  when: node_ssh_user != 'root'
+  when: NODE_SSH_USER != 'root'
   tags:
     - maass_task
 
 - name: "maass_task | Upload provision juju client templates credentials"
   copy:
     src: "./roles/maas/files/juju/credentials.yaml"
-    dest: "/home/{{node_ssh_user}}/job/{{juju_client_template_credentials_name}}"
-    owner: "{{node_ssh_user}}"
-    group: "{{node_ssh_user}}"
+    dest: "/home/{{NODE_SSH_USER}}/job/{{juju_client_template_credentials_name}}"
+    owner: "{{NODE_SSH_USER}}"
+    group: "{{NODE_SSH_USER}}"
     mode: '0600'
-  when: node_ssh_user != 'root'
+  when: NODE_SSH_USER != 'root'
   tags:
     - maass_task
 
 - name: "maass_task | Upload Provision example Ceph juju bundle"
   copy:
     src: "./roles/maas/files/ceph/bundle.yaml"
-    dest: "/home/{{node_ssh_user}}/job/{{ceph_template_credentials_name}}"
-    owner: "{{node_ssh_user}}"
-    group: "{{node_ssh_user}}"
+    dest: "/home/{{NODE_SSH_USER}}/job/{{ceph_template_credentials_name}}"
+    owner: "{{NODE_SSH_USER}}"
+    group: "{{NODE_SSH_USER}}"
     mode: '0600'
-  when: node_ssh_user != 'root'
+  when: NODE_SSH_USER != 'root'
   tags:
     - maass_task
 

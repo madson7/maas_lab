@@ -15,6 +15,9 @@ set -e
 # $11: MAAS_DBUSER
 # $12: MAAS_DBPASS
 # $13: MAAS_DBNAME
+# $14: NODE_SSH_USER
+# $15: NODE_SOURCE_SSH_KEYFILE_PUB
+
 
 # Initialize MAAS
 echo "Initializing MAAS..."
@@ -73,9 +76,9 @@ maas root boot-resources import
 
 # Import local SSH key to MAAS, if not already imported
 echo "Importing SSH key..."
-if ! (maas root sshkeys read | grep "$(</home/vagrant/.ssh/id_rsa.pub)")
+if ! (maas root sshkeys read | grep "$(</home/${14}/${15})")
 then
-    maas root sshkeys create "key=$(</home/vagrant/.ssh/id_rsa.pub)"
+    maas root sshkeys create "key=$(</home/${14}/${15})"
 else
     echo "SSH key already imported, skipping"
 fi
@@ -106,9 +109,9 @@ else
     echo "Reserved range already created, skipping"
 fi
 
-# Provide DHCP for OAM network subnet
-echo "Configuring DHCP for OAM network..."
-maas root vlan update fabric-1 untagged primary_rack=maas dhcp_on=True
+# # Provide DHCP for OAM network subnet
+# echo "Configuring DHCP for OAM network..."
+# maas root vlan update fabric-1 untagged primary_rack=maas dhcp_on=True
 
 # Configure default gateway for OAM network
 echo "Configuring gateway for OAM network..."

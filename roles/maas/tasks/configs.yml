@@ -12,12 +12,12 @@
 
 - name: "pre_task | Ensure that ssh directory for worker user exist"
   file:
-    path: "/home/{{node_ssh_user}}/job"
+    path: "/home/{{NODE_SSH_USER}}/job"
     state: directory
-    owner: "{{node_ssh_user}}"
-    group: "{{node_ssh_user}}"
+    owner: "{{NODE_SSH_USER}}"
+    group: "{{NODE_SSH_USER}}"
     mode: '0755'
-  when: node_ssh_user != 'root'
+  when: NODE_SSH_USER != 'root'
   tags:
     - pre_task
 
@@ -30,10 +30,12 @@
 
 - name: "pre_task | Upload private ssh key id_rsa"
   copy:
-    src: "{{node_source_ssh_keyfile}}"
+    src: "/home/{{ NODE_SSH_USER }}/{{NODE_SOURCE_SSH_KEYFILE}}"
     dest: "/var/snap/maas/current/root/.ssh/"
     owner: root
     group: root
     mode: '0400'
+    remote_src: yes
   tags:
     - pre_task
+  become: yes

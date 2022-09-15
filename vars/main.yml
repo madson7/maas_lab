@@ -1,7 +1,7 @@
 ---
 # vars file for vars
 
-MAAS_IP: "192.168.88.2"
+MAAS_IP: "172.18.100.29"
 OAM_DYNAMIC_RANGE_START: "192.168.88.200"
 OAM_DYNAMIC_RANGE_END: "192.168.88.254"
 OAM_RESERVED_RANGE_START: "192.168.88.1"
@@ -26,12 +26,11 @@ HOST_PASS: "teste"
 #########################################
 ###########    KEYS     #################
 #########################################
-ssh_key_filename: "controller"
-node_ssh_user: vagrant
-node_source_ssh_keyfile: "~/.ssh/controller"
-node_source_ssh_keyfile_pub: "~/.ssh/controller.pub"
+SSH_KEY_FILENAME: controller
+NODE_SSH_USER: seatelecom
+NODE_SOURCE_SSH_KEYFILE: .ssh/controller
+NODE_SOURCE_SSH_KEYFILE_PUB: .ssh/controller.pub
 #########################################
-
 
 # juju_client_template_configuration: ./roles/maas/templates/clouds.yaml.j2
 juju_client_template_configuration_name: clouds.yaml
