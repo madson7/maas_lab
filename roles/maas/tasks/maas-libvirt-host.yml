@@ -1,0 +1,10 @@
+---
+# tasks file for role/maas
+# This is based on https://maas.io/docs/how-to-install-maas
+
+# $1: NODE_SSH_USER
+# $2: HOST_IP
+
+- name: "maass_task | Maas configure the host kvm"
+  ansible.builtin.script:
+    cmd: "./roles/maas/scripts/021-libvirt-host.sh {{NODE_SSH_USER}} {{HOST_IP}}"

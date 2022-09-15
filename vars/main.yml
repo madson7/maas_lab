@@ -10,7 +10,7 @@ OAM_RESERVED_RANGE_END: "192.168.88.9"
 # Variaveis referentes a conexão do libvirt sentido maas > hospedeiro
 # onde o sshd no host precisa estar habilitado
 HOST_USERNAME: "juamsv"
-HOST_IP: "192.168.0.10"
+
 
 OAM_NETWORK_PREFIX: "192.168.88."
 CLOUD_NODES_COUNT: "1"
@@ -30,6 +30,7 @@ SSH_KEY_FILENAME: controller
 NODE_SSH_USER: seatelecom
 NODE_SOURCE_SSH_KEYFILE: .ssh/controller
 NODE_SOURCE_SSH_KEYFILE_PUB: .ssh/controller.pub
+HOST_IP: "172.18.100.29"
 #########################################
 
 # juju_client_template_configuration: ./roles/maas/templates/clouds.yaml.j2
