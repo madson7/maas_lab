@@ -1,3 +1,8 @@
 ---
 # tasks file for roles/juju
+- include_tasks: juju-config.yml
+
 - include_tasks: juju.yml
+
+# - name: "main | Include ceph bundle of juju"
+#   include_tasks: "ceph.yml"

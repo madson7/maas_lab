@@ -1,0 +1,25 @@
+---
+# tasks file for role/maas
+# This is based on https://maas.io/docs/snap/3.2/ui/maas-installation
+
+- name: "maass_task | Provisiona o arquivo de endpoint do maasw "
+  template:
+    src: "clouds.yaml.j2"
+    dest: "/home/{{NODE_SSH_USER}}/.local/share/juju/clouds.yaml"
+    owner: "{{NODE_SSH_USER}}"
+    group: "{{NODE_SSH_USER}}"
+    mode: "0644"
+  when: NODE_SSH_USER != 'root'
+  tags:
+    - maass_task
+
+- name: "maass_task | Upload provision juju client templates credentials"
+  copy:
+    src: "./roles/juju/files/juju/credentials.yaml"
+    dest: "/home/{{NODE_SSH_USER}}/.local/share/juju/credentials.yaml"
+    owner: "{{NODE_SSH_USER}}"
+    group: "{{NODE_SSH_USER}}"
+    mode: '0600'
+  when: NODE_SSH_USER != 'root'
+  tags:
+    - maass_task

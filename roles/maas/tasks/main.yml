@@ -9,8 +9,7 @@
 - name: "main | Include maas configs host libvirt"
   include_tasks: "maas-libvirt-host.yml"
 
-    # - name: "main | Include ceph bundle of juju"
-    #   include_tasks: "ceph.yml"
+
 
     # - name: "main | Include openstack bundle of juju"
     #   include_tasks: "openstack.yml"
