@@ -37,3 +37,12 @@
     name:
       - maas
     channel: 3.2/stable
+
+- name: generate SSH key "{{node_ssh_user}}"
+  user:
+    name: "{{node_ssh_user}}"
+    generate_ssh_key: yes
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/{{ssh_key_filename}}
+    force: no

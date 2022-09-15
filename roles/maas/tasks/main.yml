@@ -1,8 +1,7 @@
-- name: "main | Include configs"
-  include_tasks: "configs.yml"
-
-- name: "main | Include maas configs"
-  include_tasks: "maas.yml"
+---
+# tasks file for roles/maas
+include_tasks: "configs.yml"
+include_tasks: "maas.yml"
 
     # - name: "main | Include maas configs host IPMI"
       # include_tasks: "maas-host-impi.yml"
