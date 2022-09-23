@@ -1,14 +1,5 @@
 
+# Maas, Juju and Ansible
 
-``
-ssh-keygen -q -t rsa -N ""
-``
-juju status
-
-juju list-controllers
-
-juju clouds
-
-juju clouds --local --all
-
-teste
+Esse é um projeto que busca fazer o deploy da ferramenta
+Maas e Juju usando o Ansible
