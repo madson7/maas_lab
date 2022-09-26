@@ -24,16 +24,42 @@ O MAAS trata servidores físicos como máquinas virtuais ou instâncias na nuvem
 * Suporte de hardware composto
 * MAAS funciona com qualquer configuração de sistema e é recomendado pelas equipes por trás tanto o Chef quanto o Juju como um sistema de provisionamento físico.
 
-MAAS Features
+### MAAS Features
 
 | Feature | Description |
 | --- | --- |
-| Automation | Automatic discovery and registration of every device on the network. BMC (IPMI, AMT and more) and PXE (IPv4and IPv6) automation |
-| Fast deployment | Zero-touch deployment of Ubuntu, CentOS, Windows, RHEL and SUSE. Deploys Linux distributions in less than 5 minutes |
-| Machine configuration | Configures the machine’s network interfaces with bridges, VLANs, bonds and more. Creates advanced file system layouts with RAID,  cache, LVM and more |
-| DevOps integration | Integration with DevOps automation tools like conjure-up, Juju, Chef, Puppet, SALT, Ansible and more |
-| Pod management | Turns bare-metal servers into hypervisors, allowing automated creation of virtual machines and present them as new servers available for the deployment |
-| Network management | Observes and catalogs every IP address on the network (IPAM). Built-in highly available DHCP (active-passive) and DNS (active-active) |
-| Service tracking | Monitors and tracks critical services to ensure proper operations |
-| Manage | Comes with a REST API, Web UI and CLI |
+| Automação | Descoberta e registro automáticos de todos os dispositivos na rede. Automação BMC (IPMI, AMT e mais) e PXE (IPv4 e IPv6) |
+| Implantação rápida(Fast deployment) | Implantação Zero-touch do Ubuntu, CentOS, Windows, RHEL e SUSE. Implementa distribuições Linux em menos de 5 minutos |
+| Configuração da máquina | Configura as interfaces de rede da máquina com pontes, VLANs, ligações e muito mais. Cria layouts avançados de sistema de arquivos com RAID, cache, LVM e muito mais |
+| Integração DevOps| Integração com ferramentas de automação DevOps como conjure-up, Juju, Chef, Puppet, SALT, Ansible e muito mais |
+| Gerenciamento de pod | Transforma servidores bare-metal em hypervisors, permitindo a criação automatizada de máquinas virtuais e apresentá-las como novos servidores disponíveis para deployment |
+| Gerenciamento de rede | Observa e cataloga cada endereço IP na rede (IPAM). DHCP altamente disponível (ativo-passivo) e DNS (ativo-ativo) integrados |
+| Acompanhamento de serviço | Monitora e rastreia serviços críticos para garantir operações adequadas |
+| Gerencia | Vem com uma API REST, UI da Web e CLI |
 
+## ferramenta de modelagem Juju
+
+Juju é uma ferramenta de modelagem de aplicativos de código aberto que permite implantar, configurar, dimensionar e operar infraestruturas em nuvem de forma rápida e eficiente em nuvens como AWS, GCE e Azure; juntamente com nuvens privadas como Metal as a Service (MAAS), OpenStack e VMware VSphere.
+
+A Juju store permite o acesso a uma ampla gama de soluções de práticas recomendadas que você pode implantar com um único comando. Você pode usar o Juju a partir da linha de comando ou por meio de sua poderosa representação gráfica do modelo na GUI.
+
+### Versões de firmware dos componentes do servidor
+
+| Componente | Versão |
+| --- | --- |
+| iDRAC | -- |
+| External NIC firmware | -- |
+| BIOS | -- |
+| controlador RAID PERC | -- |
+
+### Software versions
+
+As seguintes versões de software fazem parte desta arquitetura de referência:
+
+| Componente | Versão |
+| --- | --- |
+| Ubuntu | 20.04 |
+| Openstack | -- |
+| MAAS | 3.4 |
+| Juju | -- |
+| Openstack Charms | -- |
