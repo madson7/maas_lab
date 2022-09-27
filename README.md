@@ -40,7 +40,7 @@ O MAAS trata servidores físicos como máquinas virtuais ou instâncias na nuvem
 
 ## ferramenta de modelagem Juju
 
-Juju é uma ferramenta de modelagem de aplicativos de código aberto que permite implantar, configurar, dimensionar e operar infraestruturas em nuvem de forma rápida e eficiente em nuvens como AWS, GCE e Azure; juntamente com nuvens privadas como Metal as a Service (MAAS), OpenStack e VMware VSphere.
+Juju é uma ferramenta de modelagem de aplicativos de código aberto que permite implantar, configurar, dimensionar e operar infraestruturas em nuvem de forma rápida e eficiente em nuvens como **AWS**, **GCE** e **Azure**; juntamente com nuvens privadas como **MAAS**, **OpenStack** e **VMware** **VSphere**.
 
 A Juju store permite o acesso a uma ampla gama de soluções de práticas recomendadas que você pode implantar com um único comando. Você pode usar o Juju a partir da linha de comando ou por meio de sua poderosa representação gráfica do modelo na GUI.
 
@@ -68,8 +68,10 @@ As seguintes versões de software fazem parte desta arquitetura de referência:
 | Ubuntu | 20.04 LTS |
 | Openstack | -- |
 | MAAS | 3.4 |
-| Juju | -- |
+| Juju | -- |    
 | Openstack Charms | -- |
 
-<!-- final do documento, dedicado para abreviações -->
-*[MAAS]: Metal as a Service
+<!-- final do documento, dedicado para abreviações ->
+*[MAAS]:Metal as a Service
+
+-->
