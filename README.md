@@ -64,9 +64,12 @@ Juju é a melhor maneira de encapsular todo o conhecimento operacional necessár
 As seguintes versões de software fazem parte desta arquitetura de referência:
 
 | Componente | Versão |
-| --- | --- |
+| ---------- | ------ |
 | Ubuntu | 20.04 LTS |
 | Openstack | -- |
 | MAAS | 3.4 |
 | Juju | -- |
 | Openstack Charms | -- |
+
+<!-- final do documento, dedicado para abreviações -->
+*[MAAS]: Metal as a Service
