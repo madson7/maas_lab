@@ -2,4 +2,3 @@
 # tasks file for roles/common
 - include_tasks: pre-tasks.yml
 - include_tasks: install-basic.yml
-- include_tasks: config-basic.yml

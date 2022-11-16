@@ -1,4 +1,22 @@
-- name: 'Atualizando reposit.'
-  raw: apt-get update -y
-- name: 'Install python'
-  raw: 'apt-get install -y python3'
+---
+# tasks file for role/maas
+
+- name: "install_task | Update repositories cache"
+  apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: "install_task | Update all packages to their latest version"
+  apt:
+    name: "*"
+    state: latest
+  when: ansible_os_family == "Debian"
+
+- name: generate SSH key "{{NODE_SSH_USER}}"
+  user:
+    name: "{{NODE_SSH_USER}}"
+    generate_ssh_key: yes
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/{{SSH_KEY_FILENAME}}
+    force: no

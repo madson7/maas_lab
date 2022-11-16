@@ -6,8 +6,8 @@
 - name: "main | Include maas configs"
   include_tasks: "maas.yml"
 
-- name: "main | Include maas configs host libvirt"
-  include_tasks: "maas-libvirt-host.yml"
+# - name: "main | Include maas configs host libvirt"
+#   include_tasks: "maas-libvirt-host.yml"
 
 
 

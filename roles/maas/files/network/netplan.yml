@@ -1,0 +1,57 @@
+# This is the network config written by 'subiquity'
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eno8:
+      dhcp4: no
+      addresses:
+      - 192.168.100.2/24
+      nameservers:
+        search:
+        - seasolutions.com.br
+        - maas
+        addresses: [192.168.102.2, 8.8.8.8]
+      routes:
+      - to: default
+        via: 192.168.100.1
+  vlans:
+    1002.data:
+      id: 1002
+      link: eno8
+      addresses:
+      - 192.168.101.2/24
+      nameservers:
+        search:
+        - seasolutions.com.br
+        - maas
+        addresses: [192.168.102.2, 8.8.8.8]
+      routes:
+      - to: 192.168.101.0/24
+        via: 192.168.101.1
+    1003.mgmt:
+      id: 1003
+      link: eno8
+      # addresses:
+      # - 192.168.102.2/24
+      # nameservers:
+      #   search:
+      #   - seasolutions.com.br
+      #   - maas
+      #   addresses: [192.168.102.2, 8.8.8.8]
+      # routes:
+      # - to: 192.168.102.0/24
+      #   via: 192.168.102.1
+  bridges:
+    br0:
+      dhcp4: no
+      interfaces:
+      - 1003.mgmt
+      addresses:
+      - 192.168.102.2/24
+      nameservers:
+        search: [seasolutions.com.br]
+        addresses: [192.168.102.2, 8.8.8.8]
+      routes:
+      - to: 192.168.102.0/24
+        via: 192.168.102.1

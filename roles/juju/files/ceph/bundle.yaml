@@ -1,39 +1,723 @@
-series: bionic
+# Please refer to the OpenStack Charms Deployment Guide for more information.
+# https://docs.openstack.org/project-deploy-guide/charm-deployment-guide
+
+series: focal
+
 variables:
-  osd-devices: &osd-devices /dev/vdb
-  customize-failure-domain: &customize-failure-domain True
+  openstack-origin: &openstack-origin cloud:focal-yoga
+  data-port: &data-port br-ex:bond0
+  worker-multiplier: &worker-multiplier 0.25
+  osd-devices: &osd-devices /dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdg /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdn /dev/sdm
   expected-osd-count: &expected-osd-count 3
   expected-mon-count: &expected-mon-count 3
+  # public-space: &public-space  public
+  # internal-space: &internal-space  internal
+  # admin-space: &admin-space  admin
 
 machines:
-  "0":
-  "1":
-  "2":
+  '0':
+    series: focal
+    constraints: tags=openstack
+  '1':
+    series: focal
+    constraints: tags=openstack
+  '2':
+    series: focal
+    constraints: tags=storage
 
 applications:
   ceph-mon:
+    annotations:
+      gui-x: '790'
+      gui-y: '1540'
     charm: cs:ceph-mon
     num_units: 3
     options:
       expected-osd-count: *expected-osd-count
       monitor-count: *expected-mon-count
-      customize-failure-domain: *customize-failure-domain
+      source: *openstack-origin
+    bindings:
+      "": mgmt
     to:
     - lxd:0
     - lxd:1
     - lxd:2
-
   ceph-osd:
+    annotations:
+      gui-x: '1065'
+      gui-y: '1540'
     charm: cs:ceph-osd
-    num_units: 3
+    num_units: 1
     options:
       osd-devices: *osd-devices
-      customize-failure-domain: *customize-failure-domain
-      autotune: false
+      source: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - '2'
+  ceph-radosgw-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 975.2022857666016
+      gui-y: 861.4601440429688
+    bindings: 
+      "": mgmt
+  ceph-radosgw:
+    annotations:
+      gui-x: '850'
+      gui-y: '900'
+    charm: cs:ceph-radosgw
+    num_units: 3
+    options:
+      # os-admin-hostname: storage.seasolutions.com.br
+      # os-internal-hostname: storage.seasolutions.com.br
+      # os-public-hostname: storage.seasolutions.com.br
+      vip: 192.168.102.180
+      source: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  cinder-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 1097.0257568359375
+      gui-y: 1207.35888671875
+    bindings: 
+      "": mgmt
+  cinder-mysql-router:
+    annotations:
+      gui-x: '900'
+      gui-y: '1400'
+    charm: cs:mysql-router
+  cinder:
+    annotations:
+      gui-x: '980'
+      gui-y: '1270'
+    charm: cs:cinder
+    num_units: 3
+    options:
+      # os-admin-hostname: cinder.seasolutions.com.br
+      # os-internal-hostname: cinder.seasolutions.com.br
+      # os-public-hostname: cinder.seasolutions.com.br
+      vip: 192.168.102.181
+      block-device: None
+      glance-api-version: 2
+      worker-multiplier: *worker-multiplier
+      openstack-origin: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  cinder-ceph:
+    annotations:
+      gui-x: '1120'
+      gui-y: '1400'
+    bindings:
+      "": mgmt
+    charm: cs:cinder-ceph
+    num_units: 0
+  glance-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: -134.58247900009155
+      gui-y: 1207.35888671875
+    bindings: 
+      "": mgmt
+  glance-mysql-router:
+    annotations:
+      gui-x: '-290'
+      gui-y: '1400'
+    bindings:
+      "": mgmt
+    charm: cs:mysql-router
+  glance:
+    annotations:
+      gui-x: '-230'
+      gui-y: '1270'
+    charm: cs:glance
+    num_units: 3
+    options:
+      # os-admin-hostname: glance.seasolutions.com.br
+      # os-internal-hostname: glance.seasolutions.com.br
+      # os-public-hostname: glance.seasolutions.com.br
+      vip: 192.168.102.182
+      worker-multiplier: *worker-multiplier
+      openstack-origin: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  glance-simplestreams-sync:
+    charm: cs:glance-simplestreams-sync
+    num_units: 1
+    options:
+      run: true
+    bindings:
+       "": mgmt
+    to:
+      - 'lxd:2'
+  keystone-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 416.79443359375
+      gui-y: 1231.331787109375
+    bindings: 
+      "": mgmt
+  keystone-mysql-router:
+    annotations:
+      gui-x: '230'
+      gui-y: '1400'
+    charm: cs:mysql-router
+    bindings:
+      "": mgmt
+  keystone:
+    annotations:
+      gui-x: '300'
+      gui-y: '1270'
+    charm: cs:keystone
+    num_units: 3
+    options:
+      # os-admin-hostname: keystone.seasolutions.com.br
+      # os-internal-hostname: keystone.seasolutions.com.br
+      # os-public-hostname: keystone.seasolutions.com.br
+      worker-multiplier: *worker-multiplier
+      openstack-origin: *openstack-origin
+      vip: 192.168.102.183
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  memcached:
+    charm: cs:memcached
+    num_units: 1
+    bindings:
+      "": mgmt
+    series: focal
+    to:
+     - 'lxd:2'
+  neutron-mysql-router:
+    annotations:
+      gui-x: '505'
+      gui-y: '1385'
+    charm: cs:mysql-router
+    bindings:
+      "": mgmt
+  neutron-api-plugin-ovn:
+    annotations:
+      gui-x: '690'
+      gui-y: '1385'
+    charm: cs:neutron-api-plugin-ovn
+    bindings:
+      "": mgmt
+  neutron-api-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 689.4863891601562
+      gui-y: 1237.3250732421875
+    bindings: 
+      "": mgmt
+  neutron-api:
+    annotations:
+      gui-x: '580'
+      gui-y: '1270'
+    charm: cs:neutron-api
+    num_units: 3
+    options:
+      enable-ml2-port-security: true
+      # os-admin-hostname: neutron-api.seasolutions.com.br
+      # os-internal-hostname: neutron-api.seasolutions.com.br
+      # os-public-hostname: neutron-api.seasolutions.com.br
+      vip: 192.168.102.184
+      neutron-security-groups: true
+      flat-network-providers: physnet1
+      # ovn-bridge-mappings: physnet1:br-ex
+      # bridge-interface-mappings: br-ex:bond0
+      worker-multiplier: *worker-multiplier
+      openstack-origin: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  placement-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 1426.066650390625
+      gui-y: 1230.1529541015625
+    bindings: 
+      "": mgmt
+  placement-mysql-router:
+    annotations:
+      gui-x: '1320'
+      gui-y: '1385'
+    charm: cs:mysql-router
+    bindings:
+      "": mgmt
+  placement:
+    annotations:
+      gui-x: '1320'
+      gui-y: '1270'
+    charm: cs:placement
+    num_units: 3
+    options:
+      # os-admin-hostname: placement.seasolutions.com.br
+      # os-internal-hostname: placement.seasolutions.com.br
+      # os-public-hostname: placement.seasolutions.com.br
+      vip: 192.168.102.187
+      worker-multiplier: *worker-multiplier
+      openstack-origin: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  nova-cloud-controller-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 147.09925842285156
+      gui-y: 1222.342041015625
+    bindings: 
+      "": mgmt
+  nova-mysql-router:
+    annotations:
+      gui-x: '-30'
+      gui-y: '1385'
+    charm: cs:mysql-router
+    bindings:
+      "": mgmt
+  nova-cloud-controller:
+    annotations:
+      gui-x: '35'
+      gui-y: '1270'
+    charm: cs:nova-cloud-controller
+    num_units: 3
+    options:
+      console-access-protocol: spice
+      # os-admin-hostname: compute.seasolutions.com.br
+      # os-internal-hostname: compute.seasolutions.com.br
+      # os-public-hostname: compute.seasolutions.com.br
+      vip: 192.168.102.185
+      network-manager: Neutron
+      worker-multiplier: *worker-multiplier
+      openstack-origin: *openstack-origin
+    bindings: 
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  nova-compute:
+    annotations:
+      gui-x: '190'
+      gui-y: '890'
+    charm: cs:nova-compute
+    num_units: 2
+    options:
+      customize-failure-domain: true
+      libvirt-image-backend: rbd
+      rbd-pool: cinder-ceph
+      config-flags: default_ephemeral_format=ext4
+      enable-live-migration: true
+      enable-resize: true
+      migration-auth-type: ssh
+      openstack-origin: *openstack-origin
+    bindings:
+      "": mgmt
     to:
     - '0'
     - '1'
-    - '2'
+  ntp:
+    annotations:
+      gui-x: '315'
+      gui-y: '1030'
+    charm: cs:ntp
+    num_units: 0
+    bindings:
+      "": mgmt
+  openstack-dashboard-hacluster:
+    charm: 'cs:hacluster'
+    series: focal
+    annotations:
+      gui-x: 686.48974609375
+      gui-y: 856.7550659179688
+    bindings: 
+      "": mgmt
+  openstack-dashboard-mysql-router:
+    annotations:
+      gui-x: '510'
+      gui-y: '1030'
+    charm: cs:mysql-router
+    bindings:
+      "": mgmt
+  openstack-dashboard:
+    annotations:
+      gui-x: '585'
+      gui-y: '900'
+    charm: cs:openstack-dashboard
+    num_units: 3
+    options:
+      default-theme: default
+      default-create-volume: no
+      enforce-ssl: true
+      # os-admin-hostname: openstack.seasolutions.com.br
+      openstack-origin: *openstack-origin
+      password-retrieve: true
+      vip: 192.168.102.186
+      # ubuntu-theme: no
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  rabbitmq-server:
+    annotations:
+      gui-x: '300'
+      gui-y: '1550'
+    charm: cs:rabbitmq-server
+    num_units: 3
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  mysql-innodb-cluster:
+    annotations:
+      gui-x: '535'
+      gui-y: '1550'
+    bindings:
+      "": mgmt
+    charm: ch:mysql-innodb-cluster
+    channel: 8.0/stable
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  ovn-central:
+    annotations:
+      gui-x: '70'
+      gui-y: '1550'
+    charm: cs:ovn-central
+    num_units: 3
+    options:
+      source: *openstack-origin
+    bindings:
+      "": mgmt
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+  ovn-chassis:
+    annotations:
+      gui-x: '120'
+      gui-y: '1030'
+    charm: cs:ovn-chassis
+    # *** Please update the `bridge-interface-mappings` to values suitable ***
+    # *** for the hardware used in your deployment. See the referenced     ***
+    # *** documentation at the top of this file.                           ***
+    options:
+      ovn-bridge-mappings: physnet1:br-ex
+      bridge-interface-mappings: *data-port
+    bindings:
+      "": mgmt
+  vault-mysql-router:
+    annotations:
+      gui-x: '1535'
+      gui-y: '1560'
+    bindings:
+      "": mgmt
+    charm: ch:mysql-router
+    channel: 8.0/stable
+  vault:
+    annotations:
+      gui-x: '1610'
+      gui-y: '1430'
+    bindings:
+      "": mgmt
+    charm: ch:vault
+    channel: 1.7/stable
+    num_units: 1
+    to:
+    - lxd:2
+
+  # vault-hacluster:
+  #   charm: 'cs:hacluster'
+  #   series: focal
+  #   annotations:
+  #   bindings: 
+  #     "": mgmt
+  # vault-mysql-router:
+  #   annotations:
+  #     gui-x: '1535'
+  #     gui-y: '1560'
+  #   charm: cs:mysql-router
+  #   bindings:
+  #     "": mgmt
+  # vault:
+  #   annotations:
+  #     gui-x: '1610'
+  #     gui-y: '1430'
+  #   charm: cs:vault
+  #   num_units: 3
+  #   bindings:
+  #     "": mgmt
+  #   options:
+  #     vip: 192.168.102.188
+  #   to:
+  #   - lxd:0
+  #   - lxd:1
+  #   - lxd:2
+  # aodh:
+  #   annotations:
+  #     gui-x: '1500'
+  #     gui-y: '0'
+  #   charm: ch:aodh
+  #   num_units: 1
+  #   bindings:
+  #     "": mgmt
+  #   options:
+  #     openstack-origin: *openstack-origin
+  #   to:
+  #   - lxd:2
+  # aodh-mysql-router:
+  #   charm: ch:mysql-router
+  #   channel: 8.0/stable
+  # ceilometer:
+  #   annotations:
+  #     gui-x: '1250'
+  #     gui-y: '0'
+  #   charm: ch:ceilometer
+  #   num_units: 1
+  #   bindings:
+  #     "": mgmt
+  #   options:
+  #     openstack-origin: *openstack-origin
+  #   to:
+  #   - lxd:2
+  # ceilometer-agent:
+  #   annotations:
+  #     gui-x: '1250'
+  #     gui-y: '500'
+  #   charm: ch:ceilometer-agent
+  #   num_units: 0
+  #   bindings:
+  #     "": mgmt
+  # gnocchi:
+  #   annotations:
+  #     gui-x: '1500'
+  #     gui-y: '250'
+  #   num_units: 1
+  #   bindings:
+  #     "": mgmt
+  #   charm: ch:gnocchi
+  #   channel: yoga/stable
+  #   options:
+  #     openstack-origin: *openstack-origin
+  #   to:
+  #   - lxd:2
+  # gnocchi-mysql-router:
+  #   bindings:
+  #     "": mgmt
+  #   charm: ch:mysql-router
+  #   channel: 8.0/stable
 
 relations:
-  - [ ceph-osd, ceph-mon ]
+  - - nova-compute:amqp
+    - rabbitmq-server:amqp
+  - - nova-cloud-controller:identity-service
+    - keystone:identity-service
+  - - glance:identity-service
+    - keystone:identity-service
+  - - neutron-api:identity-service
+    - keystone:identity-service
+  - - neutron-api:amqp
+    - rabbitmq-server:amqp
+  - - glance:amqp
+    - rabbitmq-server:amqp
+  - - nova-cloud-controller:image-service
+    - glance:image-service
+  - - nova-compute:image-service
+    - glance:image-service
+  - - nova-cloud-controller:cloud-compute
+    - nova-compute:cloud-compute
+  - - nova-cloud-controller:amqp
+    - rabbitmq-server:amqp
+  - - openstack-dashboard:identity-service
+    - keystone:identity-service
+  - - openstack-dashboard-hacluster:ha
+    - openstack-dashboard:ha
+  - - nova-cloud-controller:neutron-api
+    - neutron-api:neutron-api
+  - - cinder:image-service
+    - glance:image-service
+  - - cinder:amqp
+    - rabbitmq-server:amqp
+  - - cinder:identity-service
+    - keystone:identity-service
+  - - cinder:cinder-volume-service
+    - nova-cloud-controller:cinder-volume-service
+  - - cinder-ceph:storage-backend
+    - cinder:storage-backend
+  - - ceph-mon:client
+    - nova-compute:ceph
+  - - nova-compute:ceph-access
+    - cinder-ceph:ceph-access
+  - - ceph-mon:client
+    - cinder-ceph:ceph
+  - - ceph-mon:client
+    - glance:ceph
+  - - ceph-osd:mon
+    - ceph-mon:osd
+  - - ntp:juju-info
+    - nova-compute:juju-info
+  - - ceph-radosgw:mon
+    - ceph-mon:radosgw
+  - - ceph-radosgw:identity-service
+    - keystone:identity-service
+  - - placement:identity-service
+    - keystone:identity-service
+  - - placement:placement
+    - nova-cloud-controller:placement
+  - - keystone:shared-db
+    - keystone-mysql-router:shared-db
+  - - cinder:shared-db
+    - cinder-mysql-router:shared-db
+  - - glance:shared-db
+    - glance-mysql-router:shared-db
+  - - nova-cloud-controller:shared-db
+    - nova-mysql-router:shared-db
+  - - neutron-api:shared-db
+    - neutron-mysql-router:shared-db
+  - - openstack-dashboard:shared-db
+    - openstack-dashboard-mysql-router:shared-db
+  - - placement:shared-db
+    - placement-mysql-router:shared-db
+  - - vault:shared-db
+    - vault-mysql-router:shared-db
+  - - keystone-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - cinder-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - nova-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - glance-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - neutron-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - openstack-dashboard-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - placement-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - vault-mysql-router:db-router
+    - mysql-innodb-cluster:db-router
+  - - neutron-api-plugin-ovn:neutron-plugin
+    - neutron-api:neutron-plugin-api-subordinate
+  - - neutron-api-hacluster:ha
+    - neutron-api:ha
+  - - ovn-central:certificates
+    - vault:certificates
+  - - ovn-central:ovsdb-cms
+    - neutron-api-plugin-ovn:ovsdb-cms
+  - - neutron-api:certificates
+    - vault:certificates
+  - - ovn-chassis:nova-compute
+    - nova-compute:neutron-plugin
+  - - ovn-chassis:certificates
+    - vault:certificates
+  - - ovn-chassis:ovsdb
+    - ovn-central:ovsdb
+  - - vault:certificates
+    - neutron-api-plugin-ovn:certificates
+  - - vault:certificates
+    - cinder:certificates
+  - - vault:certificates
+    - glance:certificates
+  - - vault:certificates
+    - keystone:certificates
+  - - vault:certificates
+    - nova-cloud-controller:certificates
+  - - vault:certificates
+    - openstack-dashboard:certificates
+  - - vault:certificates
+    - placement:certificates
+  - - vault:certificates
+    - ceph-radosgw:certificates
+  - - vault:certificates
+    - mysql-innodb-cluster:certificates
+  - - keystone-hacluster:ha
+    - keystone:ha
+  - - glance-simplestreams-sync:certificates
+    - vault:certificates
+  - - glance-simplestreams-sync:identity-service
+    - keystone:identity-service
+  - - nova-cloud-controller-hacluster:ha
+    - nova-cloud-controller:ha
+  - - nova-cloud-controller:memcache
+    - memcached:cache
+  - - ceph-radosgw-hacluster:ha
+    - ceph-radosgw:ha
+  - - cinder-hacluster:ha
+    - cinder:ha
+  - - glance-hacluster:ha
+    - glance:ha
+  - - placement-hacluster:ha
+    - placement:ha
+
+  # - - aodh-mysql-router:db-router
+  #   - mysql-innodb-cluster:db-router
+  # - - aodh:shared-db
+  #   - aodh-mysql-router:shared-db
+  # - - aodh:identity-service
+  #   - keystone:identity-service
+  # - - aodh:amqp
+  #   - rabbitmq-server:amqp
+  # - - ceilometer-agent:ceilometer-service
+  #   - ceilometer:ceilometer-service
+  # - - ceilometer:identity-notifications
+  #   - keystone:identity-notifications
+  # - - ceilometer:identity-credentials
+  #   - keystone:identity-credentials
+  # - - vault:certificates
+  #   - ceilometer:certificates
+  # - - ceilometer-agent:nova-ceilometer
+  #   - nova-compute:nova-ceilometer
+  # - - ceilometer-agent:amqp
+  #   - rabbitmq-server:amqp
+  # - - ceilometer:amqp
+  #   - rabbitmq-server:amqp
+  # - - gnocchi:storage-ceph
+  #   - ceph-mon:client
+  # - - gnocchi-mysql-router:db-router
+  #   - mysql-innodb-cluster:db-router
+  # - - gnocchi:shared-db
+  #   - gnocchi-mysql-router:shared-db
+  # - - gnocchi:amqp
+  #   - rabbitmq-server:amqp
+  # - - gnocchi:coordinator-memcached
+  #   - memcached:cache
+  # - - gnocchi:metric-service
+  #   - ceilometer:metric-service
+  # - - gnocchi:identity-service
+  #   - keystone:identity-service
+  # - - vault-hacluster:ha
+  #   - vault:ha

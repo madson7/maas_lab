@@ -1,18 +1,34 @@
+# $1: MAAS_IP
+# $2: OAM_DYNAMIC_RANGE_START
+# $3: OAM_DYNAMIC_RANGE_END
+# $4: OAM_RESERVED_RANGE_START
+# $5: OAM_RESERVED_RANGE_END
+# $6: HOST_USERNAME
+# $7: HOST_IP
+# $8: OAM_NETWORK_PREFIX
+# $9: CLOUD_NODES_COUNT
+# $10: LOCAL_IMAGE_MIRROR_URL
+# $11: MAAS_DBUSER
+# $12: MAAS_DBPASS
+# $13: MAAS_DBNAME
+# $14: NODE_SSH_USER
+# $15: NODE_SOURCE_SSH_KEYFILE_PUB
+
 ---
 # vars file for vars
 
-MAAS_IP: "172.18.100.29"
-OAM_DYNAMIC_RANGE_START: "192.168.88.200"
-OAM_DYNAMIC_RANGE_END: "192.168.88.254"
-OAM_RESERVED_RANGE_START: "192.168.88.1"
-OAM_RESERVED_RANGE_END: "192.168.88.9"
+MAAS_IP: "192.168.102.2"
+OAM_DYNAMIC_RANGE_START: "192.168.102.200"
+OAM_DYNAMIC_RANGE_END: "192.168.102.254"
+OAM_RESERVED_RANGE_START: "192.168.102.1"
+OAM_RESERVED_RANGE_END: "192.168.102.9"
 
 # Variaveis referentes a conexão do libvirt sentido maas > hospedeiro
 # onde o sshd no host precisa estar habilitado
-HOST_USERNAME: "juamsv"
+HOST_USERNAME: "ubuntu"
 
 
-OAM_NETWORK_PREFIX: "192.168.88."
+OAM_NETWORK_PREFIX: "192.168.102."
 CLOUD_NODES_COUNT: "1"
 LOCAL_IMAGE_MIRROR_URL: "http://images.maas.io/ephemeral-v3/candidate"
 
@@ -27,10 +43,10 @@ HOST_PASS: "teste"
 ###########    KEYS     #################
 #########################################
 SSH_KEY_FILENAME: controller
-NODE_SSH_USER: seatelecom
+NODE_SSH_USER: ubuntu
 NODE_SOURCE_SSH_KEYFILE: .ssh/controller
 NODE_SOURCE_SSH_KEYFILE_PUB: .ssh/controller.pub
-HOST_IP: "172.18.100.29"
+HOST_IP: "192.168.102.2"
 #########################################
 
 # juju_client_template_configuration: ./roles/maas/templates/clouds.yaml.j2

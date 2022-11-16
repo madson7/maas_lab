@@ -1,0 +1,48 @@
+juju status ovn-central
+
+  'ovsdb-peer' incomplete, 'certificates' awaiting server certificate data
+
+juju run-action --wait vault/leader generate-root-ca
+
+juju run-action --wait vault/leader upload-signed-csr \
+    pem="$(cat myCA.pem | base64)" \
+    root-ca="$(cat myCA.pem | base64)" \
+    allowed-domains='seasolutions.com.br'
+
+juju status --format=yaml openstack-dashboard | grep public-address | awk '{print $2}' | head -1
+juju run --unit keystone/leader leader-get admin_passwd
+
+      vip: 192.168.102.180
+      vip: 192.168.102.181
+      vip: 192.168.102.182
+      vip: 192.168.102.183
+      vip: 192.168.102.184
+      vip: 192.168.102.187
+      vip: 192.168.102.185
+      vip: 192.168.102.186
+      vip: 192.168.102.188
+
+
+vault operator unseal Y2TCV72NbftexsgGuw2puSKnmYcM3SmXfvX4k7ZoX5mB
+vault operator unseal oTyDlUSL/wjRvXTFmIGWss8X2iuvKIKnd8I0rlHNMruK
+vault operator unseal Dm1QUV5a1HU+fBoO34afKzui90AosjrbMeD/1DpLITYP
+
+export VAULT_TOKEN=s.kv2LHn0yOt0koycZiLeJsEnf
+
+juju run-action --wait vault/leader authorize-charm token=s.mFvVo25XmuAv9ojZF0mduUh4
+
+
+ 186  juju status
+  187  juju models 
+  192  juju deploy ./bundle.yml
+
+  247  juju bootstrap maas-cloud --constraints "cpu-cores=8 mem=6144" --show-log --debug 
+
+  266  juju destroy-model openstack --yes --force
+
+
+  351  juju models
+  352  juju add-model openstack
+  353  juju models
+  354  juju model-config 
+  355  juju model-config default-space=mgmt

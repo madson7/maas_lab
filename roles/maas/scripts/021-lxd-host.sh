@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -e
+
+# $1: NODE_SSH_USER
+# $2: MAAS_IP
+
+# Log into MAAS
+echo "Logging into MAAS..."
+maas login root http://localhost:5240/MAAS $(maas apikey --username root)
+
+# Conexão de host KVM
+maas root vmhosts create type=lxd power_address=localhost:8443 project=default name=controller-01
+
+
+lxc config trust add - <<EOF
+
+-----BEGIN CERTIFICATE-----
+MIIE3jCCAsYCEDs0csns7J82UxfbLatdoEUwDQYJKoZIhvcNAQENBQAwPjENMAsG
+A1UECgwETUFBUzEtMCsGA1UECwwkNTc5ZWZmNDYtYWJkMS00Y2YxLThmZTItYjlm
+YWYwZDc3YTA5MB4XDTIyMDkyOTIwMjYwOFoXDTMyMDkyNjIwMjYwOFowHTEbMBkG
+A1UEAwwSY29udHJvbGxlci0wMUBtYWFzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8A
+MIICCgKCAgEAzKi5lzLbJ58ifNOb4q/MNj1g9byKROpKQXg/iOvsAy5/BcTlvm79
+Giro27wYyT0LyMaQGWoa31pTEy55a1ThXrqy3H8tZGakVlSh7yT2gagJaqcdsdg3
+0W/5ErvGDuopYJnGQ335zKikliPtqqvEabhzzjluWVJA4UbZwYoWC725CUzFhvyw
+fhdXXMkCeLBei5nkroPqETugVXpydbFPG+cZZsQg7ku7cGao7spfWUzKiTRAVU5z
+G3Jn0Fpc3Nv3DFZseAl2EMmCL/GwvsozdhokX+99lhECtDWjFMMq1cyrXBrIC25M
+18c2saA14D92GCL7GkL/yjPaBHX8UjM7VCE7y9f1T4xZvej75T5aOtE7dXR3xVVG
+3sJuUyPHBSpqnU92X6yE/lrG1NT57vRUtpq+ZeXgQJR0A9iKRvr5sPgnlTh2+akw
+RUUS4vaYBHwvtVPQTJ1ZrdvJU3j5LkgD8u61iSbWZbfQG0Ge9MP4dRijGLpkr+jx
+TuEtH++iEfdomilSOry61dEIRun0payawu3GSjiZoZbnwMsgQ5T5w4EDYMhaaMP8
+zwdZEUhUdK1iGXY54YYwuxq3m5YvU3sXdiKCrBaX2yQhAH/2YIw2CRGzt6a2pjmd
+RRyP/i5e2GttKlyMmkzlfGtYuOJxXEA0LxxCgXeFN8iFaFDUl14UoIkCAwEAATAN
+BgkqhkiG9w0BAQ0FAAOCAgEAszYNvkhlHDYUfuIO1HD4AtsBw9llIxbLu1bPzL3L
+u7un3EQ1FmKGCQIdX5+EEhCoY/ZQgDAh1PoOHpVIkUWeu9/usAbTp0hEKZNWpsEU
+ceHTAn/1FDRe7pceEL+FuJzHMlfdurLCpNIZ13Yn/yhyeHvupZPnmmvU5tlrM7ea
+ILK99AUvNIb0ko4kbRtBz94FniYjbq2434rp18I02ZpMmKPVWoDx6RMCgzKnBUvq
+mnLOAkAFWK8Je2jpQiX69zDNJKFDIH2ggiDIeij30vG/Go85cXm/ref1W4qc8n6z
+zyxmNPXsNNOEe/sjBQlJgDCwGxl+u+cJ+Oo1cn+mPAsgQVHb3SN7XK2y+M9yGxfc
+Getfe5Vxa+5D2eA4rS95k7l99FlAwm/ttePQEejaJTiRvleat0GpkYkKEi5KpZT+
+Ibf6P/4Stx0fLdxMjF5dkcE9eZkmbb7uZ3Ml/G8yJlTjzLiCb5jDAgqB3OqyFuDQ
+bPRzGFcZ1YOUzoY/E7Dzji/orqKQlrcuAFShkl8YjFVNvQOwecEdGECqVuUOTGEI
+5YUDrJQsom7wFH2YYimDwLIA/tVkAoOHBdT/Qz4tO20iT0cG1c4IqJi+NBzz/rWe
+p4vIH3q4iFuc89mDgPNgrrj5wscXPP7M3UnqCAwpYU16dKLn3u07wVGltx4/1FTD
+VbI=
+-----END CERTIFICATE-----
+
+EOF

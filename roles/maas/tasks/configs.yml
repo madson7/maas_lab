@@ -5,21 +5,10 @@
   lineinfile:
     dest: /etc/hosts
     regexp: '.*{{item}}$'
-    line: "{{hostvars[item].ansible_host}} {{item}}"
+    line: "{{hostvars[item].ansible_host}} {{item}}.seasolutions.com.br"
     state: present
   when: hostvars[item].ansible_host is defined
   with_items: "{{groups.all}}"
-
-- name: "pre_task | Ensure that ssh directory for worker user exist"
-  file:
-    path: "/home/{{NODE_SSH_USER}}/job"
-    state: directory
-    owner: "{{NODE_SSH_USER}}"
-    group: "{{NODE_SSH_USER}}"
-    mode: '0755'
-  when: NODE_SSH_USER != 'root'
-  tags:
-    - pre_task
 
 - name: "pre_task | Ensure that ssh directory for host's private SSH key"
   file:
